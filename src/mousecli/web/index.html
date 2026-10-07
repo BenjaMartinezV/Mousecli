@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0f14">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mousecli">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Mousecli</title>
+</head>
+<body>
+  <header class="top">
+    <button id="btn-settings" class="icon-btn" aria-label="Ajustes">
+      <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm7.43-2.53a7.8 7.8 0 0 0 0-1.94l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.68-.98l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65c-.61.25-1.17.58-1.68.98l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.49.49 0 0 0 .12.64l2.11 1.65a7.9 7.9 0 0 0 0 1.94l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.51.4 1.07.73 1.68.98l.38 2.65c.04.24.25.42.49.42h4c.24 0 .45-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.68-.98l2.49 1c.22.08.49 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65Z"/></svg>
+    </button>
+    <div class="status" id="status" data-state="connecting">
+      <span class="dot"></span><span id="status-text">Conectando…</span><span id="latency" class="latency"></span>
+    </div>
+    <button id="btn-timer" class="timer-chip" aria-label="Timer">--:--</button>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-mode="laser" class="active">Láser</button>
+    <button role="tab" data-mode="mouse">Mouse</button>
+    <button role="tab" data-mode="text">Texto</button>
+  </nav>
+
+  <main>
+    <div id="pad" class="pad">
+      <canvas id="pad-canvas"></canvas>
+      <p id="pad-hint" class="pad-hint"></p>
+    </div>
+
+    <div id="text-panel" class="text-panel" hidden>
+      <textarea id="text-input" placeholder="Escribe o usa el micrófono del teclado para dictar…" autocomplete="off"></textarea>
+      <div class="row">
+        <label class="check"><input type="checkbox" id="text-enter"> Enter al enviar</label>
+        <button id="text-send" class="primary">Enviar</button>
+      </div>
+      <div class="keys">
+        <button data-key="backspace">⌫</button>
+        <button data-key="enter">Enter</button>
+        <button data-key="tab">Tab</button>
+        <button data-key="esc">Esc</button>
+        <button data-key="start">F5</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="controls">
+    <button class="big" data-key="prev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="mini">
+      <button data-vol="down" aria-label="Bajar volumen">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 12h4"/></svg>
+      </button>
+      <button data-vol="up" aria-label="Subir volumen">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 12h4M19 10v4"/></svg>
+      </button>
+      <button data-vol="mute" aria-label="Silenciar">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 10l4 4M21 10l-4 4"/></svg>
+      </button>
+      <button id="btn-present" aria-label="Pantalla completa">
+        <svg class="enter" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        <svg class="exit" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+      </button>
+    </div>
+    <button class="big next" data-key="next" aria-label="Siguiente">
+      <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </footer>
+
+  <dialog id="settings">
+    <h2>Ajustes</h2>
+    <label>Sensibilidad del láser <output data-for="laserSens"></output>
+      <input type="range" id="laserSens" min="1" max="8" step="0.5">
+    </label>
+    <label>Tamaño del láser <output data-for="laserSize"></output>
+      <input type="range" id="laserSize" min="6" max="40" step="1">
+    </label>
+    <label>Sensibilidad del mouse <output data-for="mouseSens"></output>
+      <input type="range" id="mouseSens" min="0.5" max="4" step="0.25">
+    </label>
+    <label class="check"><input type="checkbox" id="haptics"> Vibrar al tocar botones</label>
+    <div class="row">
+      <span>Pantalla del láser: <b id="screen-name">—</b></span>
+      <button id="btn-screen">Cambiar</button>
+    </div>
+    <p class="muted" id="about"></p>
+    <form method="dialog"><button class="primary wide">Listo</button></form>
+  </dialog>
+
+  <dialog id="timer">
+    <h2>Timer</h2>
+    <div id="timer-big" class="timer-big">--:--</div>
+    <div class="seg">
+      <label><input type="radio" name="tmode" value="down"> Cuenta regresiva</label>
+      <label><input type="radio" name="tmode" value="up"> Cronómetro</label>
+    </div>
+    <label>Duración (minutos)
+      <input type="number" id="t-minutes" min="1" max="600" inputmode="numeric">
+    </label>
+    <label>Alertas (minutos restantes, separados por coma)
+      <input type="text" id="t-alerts" inputmode="decimal" placeholder="5, 1">
+    </label>
+    <div class="row">
+      <button id="t-toggle" class="primary">Iniciar</button>
+      <button id="t-reset">Reiniciar</button>
+    </div>
+    <form method="dialog"><button class="wide">Cerrar</button></form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

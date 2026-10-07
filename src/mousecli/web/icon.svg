@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4251"/>
+      <stop offset="0.55" stop-color="#1c2232"/>
+      <stop offset="1" stop-color="#0f1424"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd0ff"/>
+      <stop offset="0.5" stop-color="#4f9bf0"/>
+      <stop offset="1" stop-color="#2a63d6"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3344"/>
+      <stop offset="1" stop-color="#1b2131"/>
+    </linearGradient>
+    <linearGradient id="next" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#46e3ff"/>
+      <stop offset="1" stop-color="#1f86ff"/>
+    </linearGradient>
+    <radialGradient id="dot" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#ff6f78"/>
+      <stop offset="0.6" stop-color="#f5213a"/>
+      <stop offset="1" stop-color="#d10f28"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff2a3d" stop-opacity="0.7"/>
+      <stop offset="0.6" stop-color="#ff2a3d" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ff2a3d" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="screen-clip">
+      <rect x="330" y="210" width="364" height="680" rx="48"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+
+  <!-- side buttons -->
+  <g fill="#9cc8f5">
+    <rect x="294" y="290" width="12" height="44" rx="5"/>
+    <rect x="294" y="350" width="12" height="70" rx="5"/>
+    <rect x="294" y="432" width="12" height="70" rx="5"/>
+    <rect x="718" y="360" width="12" height="96" rx="5"/>
+  </g>
+
+  <!-- phone -->
+  <rect x="306" y="200" width="412" height="728" rx="72" fill="#2457c4"/>
+  <rect x="306" y="186" width="412" height="728" rx="72" fill="#1d2433" stroke="url(#frame)" stroke-width="16"/>
+  <rect x="330" y="210" width="364" height="680" rx="48" fill="url(#screen)"/>
+  <polygon clip-path="url(#screen-clip)" points="610,210 694,210 694,330 330,890 330,800" fill="#ffffff" opacity="0.05"/>
+  <path d="M405 210h214v8a26 26 0 0 1-26 26H431a26 26 0 0 1-26-26z" fill="#121726"/>
+  <rect x="484" y="221" width="56" height="6" rx="3" fill="#3a4357"/>
+  <circle cx="560" cy="224" r="7" fill="#3a4357"/>
+  <rect x="482" y="902" width="60" height="7" rx="3.5" fill="#121726"/>
+
+  <!-- laser -->
+  <circle cx="512" cy="512" r="190" fill="url(#glow)"/>
+  <g fill="none" stroke="#ff3446">
+    <circle cx="512" cy="512" r="150" stroke-width="4" opacity="0.22"/>
+    <circle cx="512" cy="512" r="128" stroke-width="8" opacity="0.35"/>
+    <circle cx="512" cy="512" r="104" stroke-width="12" opacity="0.5"/>
+  </g>
+  <circle cx="512" cy="512" r="85" fill="url(#dot)"/>
+
+  <!-- arrows -->
+  <path d="M252 440l-72 72 72 72" fill="none" stroke="#e8eefa" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M772 440l72 72-72 72" fill="none" stroke="url(#next)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,26 @@
+# Changelog
+
+Todos los cambios relevantes de este proyecto se documentan en este archivo.
+
+El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
+y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
+
+## [Sin publicar]
+
+## [0.1.0] - 2026-10-07
+
+### Agregado
+
+- Control de diapositivas desde el teléfono mediante una web app, sin instalación.
+- Conexión por código QR con token privado persistente.
+- Puntero láser con estela, dibujado en una capa transparente sobre la presentación.
+- Botón para entrar y salir de la presentación en pantalla completa.
+- Control de volumen con repetición al mantener presionado.
+- Modo mouse: mover, clic, clic derecho y scroll con dos dedos.
+- Modo texto con soporte para dictado mediante el teclado del teléfono.
+- Timer configurable con cuenta regresiva o cronómetro, alertas y vibración.
+- Selección de la pantalla del láser en configuraciones con proyector.
+- Aplicaciones descargables para Windows, macOS y Linux.
+
+[Sin publicar]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/BenjaMartinezV/Mousecli/releases/tag/v0.1.0
