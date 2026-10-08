@@ -144,6 +144,9 @@ def main(argv=None):
         return
 
     set_windows_app_id()
+    if sys.platform == "darwin":
+        # By default Qt activates the whole app when a window is raised.
+        os.environ.setdefault("QT_MAC_SET_RAISE_PROCESS", "0")
     app = QApplication(sys.argv)
     app.setApplicationName("Mousecli")
     app.setWindowIcon(QIcon(str(srv.WEB_DIR / "icon-512.png")))
@@ -166,6 +169,10 @@ def main(argv=None):
     window = gui.MainWindow(url, qr.get_matrix(), server)
     window.show()
     overlay = gui.LaserOverlay(laser)  # noqa: F841 (kept alive by reference)
+    if sys.platform == "darwin":
+        from . import macos
+
+        macos.make_accessory_app()
 
     # Let Ctrl+C in the terminal close the Qt app.
     signal.signal(signal.SIGINT, lambda *_: app.quit())

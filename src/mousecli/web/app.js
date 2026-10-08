@@ -87,8 +87,12 @@ document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     connect();
     requestWakeLock();
+  } else {
+    // Locking the phone or switching apps mid-touch swallows the pointerup.
+    resetPad();
   }
 });
+window.addEventListener("blur", () => resetPad());
 
 // Keeps the phone screen on. Only available on HTTPS, so it's best-effort.
 async function requestWakeLock() {
@@ -155,6 +159,7 @@ function setMode(mode) {
   $("#pad").hidden = mode === "text";
   $("#text-panel").hidden = mode !== "text";
   updateHint();
+  resetPad();
   resizePad();
 }
 
@@ -183,8 +188,9 @@ let glow = { x: 0, y: 0, k: 0 };
 let drawQueued = false;
 
 const SCROLL_STEP = 22; // px of finger travel per scroll notch
-const TAP_MS = 250;
-const TAP_SLOP = 8;
+// Generous on purpose: a real fingertip drifts a few px and lingers a bit.
+const TAP_MS = 300;
+const TAP_SLOP = 12;
 
 function queueFlush() {
   if (!flushQueued) {
@@ -213,9 +219,23 @@ function flush() {
   }
 }
 
+// Forget every tracked finger. Without this, a finger whose pointerup never
+// arrived stays "on the pad" forever and every later tap looks like a
+// two-finger gesture, so single clicks silently stop working.
+function resetPad() {
+  if (pointers.size && settings.mode === "laser") send({ t: "laser", on: false });
+  pointers.clear();
+  gesture = null;
+  acc.mx = acc.my = acc.sy = 0;
+}
+
 pad.addEventListener("pointerdown", (e) => {
   e.preventDefault();
-  pad.setPointerCapture(e.pointerId);
+  // The first finger of a new touch means nothing else is on the screen.
+  if (e.isPrimary && pointers.size) resetPad();
+  try {
+    pad.setPointerCapture(e.pointerId);
+  } catch {}
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY });
   if (pointers.size === 1) {
     gesture = { t0: performance.now(), maxPointers: 1, moved: false };
@@ -260,7 +280,7 @@ function endPointer(e) {
 
   if (settings.mode === "laser") {
     send({ t: "laser", on: false });
-  } else if (gesture && !gesture.moved && performance.now() - gesture.t0 < TAP_MS) {
+  } else if (e.type === "pointerup" && gesture && !gesture.moved && performance.now() - gesture.t0 < TAP_MS) {
     send({ t: "click", b: gesture.maxPointers >= 2 ? "right" : "left" });
     buzz(10);
   }
@@ -268,8 +288,10 @@ function endPointer(e) {
   acc.sy = 0;
   queueDraw();
 }
+// Only a real pointerup can be a tap; cancel or lost capture just ends the gesture.
 pad.addEventListener("pointerup", endPointer);
 pad.addEventListener("pointercancel", endPointer);
+pad.addEventListener("lostpointercapture", endPointer);
 
 // Dot grid that lights up around the finger.
 function setGlow(e) {

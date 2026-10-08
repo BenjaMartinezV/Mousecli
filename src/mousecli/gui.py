@@ -4,12 +4,17 @@ The server runs in another thread and only touches `LaserState` (lock-guarded).
 All Qt objects live in the GUI thread and poll that state on a 60 Hz timer.
 """
 
+import sys
 import threading
 from collections import deque
 
 from PyQt6.QtCore import QPointF, QRectF, Qt, QTimer
 from PyQt6.QtGui import QBrush, QColor, QFont, QGuiApplication, QPainter, QRadialGradient
 from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
+
+IS_MAC = sys.platform == "darwin"
+if IS_MAC:
+    from . import macos
 
 FRAME_MS = 16
 TRAIL_LEN = 10
@@ -67,6 +72,9 @@ class LaserOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        if IS_MAC:
+            # Qt hides tool windows while the app is inactive, i.e. during the slideshow.
+            self.setAttribute(Qt.WidgetAttribute.WA_MacAlwaysShowToolWindow)
 
         self.target = QPointF()
         self.pos_ = QPointF()
@@ -116,7 +124,12 @@ class LaserOverlay(QWidget):
             # Fresh activation: show without stealing focus from the slideshow.
             self.trail.clear()
             self.show()
-            self.raise_()
+            if IS_MAC:
+                # raise_() would activate the app and kick PowerPoint out of fullscreen;
+                # the native window level keeps the overlay on top instead.
+                macos.configure_overlay(self.winId())
+            else:
+                self.raise_()
 
         if active:
             self.alpha = min(1.0, self.alpha + 0.25)

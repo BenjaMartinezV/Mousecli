@@ -7,6 +7,14 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+## [0.1.1] - 2026-10-08
+
+### Corregido
+
+- El clic con un toque en el modo mouse podía dejar de funcionar hasta recargar la página, si el teléfono perdía el aviso de que se levantó un dedo (por ejemplo, al bloquear la pantalla durante un toque).
+- Los toques son más tolerantes a pequeños movimientos del dedo.
+- En macOS, activar el láser ya no saca a PowerPoint de la presentación en pantalla completa.
+
 ## [0.1.0] - 2026-10-07
 
 ### Agregado
@@ -22,5 +30,6 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 - Selección de la pantalla del láser en configuraciones con proyector.
 - Aplicaciones descargables para Windows, macOS y Linux.
 
-[Sin publicar]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.1.0...HEAD
+[Sin publicar]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/BenjaMartinezV/Mousecli/releases/tag/v0.1.0

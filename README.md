@@ -136,7 +136,7 @@ Desde el engranaje de la web app puedes ajustar la sensibilidad del láser y del
 
 En el teléfono funciona con cualquier navegador moderno: Chrome, Safari, Firefox, Edge o Samsung Internet.
 
-**macOS:** el láser no se muestra sobre presentaciones en un Espacio de pantalla completa nativo. Usa la opción "Reproducir en ventana" de Keynote o el modo ventana de PowerPoint.
+**macOS:** Mousecli no muestra ícono en el Dock, para no quitarle el foco a la presentación. Ciérralo con el botón *Salir* de su ventana.
 
 **Linux con Wayland:** por diseño de seguridad, Wayland restringe la simulación de teclado y las ventanas superpuestas. Se recomienda iniciar sesión en X11.
 
