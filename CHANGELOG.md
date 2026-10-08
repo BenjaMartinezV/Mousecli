@@ -7,6 +7,12 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Agregado
+
+- Control desde Apple Watch, Siri y gestos de la mano mediante la app Atajos de Apple.
+- API HTTP (`/api/<comando>?token=...`) para clientes que no usan WebSocket.
+- Sección "Apple Watch y Atajos" en los ajustes de la web app, con las direcciones listas para copiar.
+
 ## [0.1.1] - 2026-10-08
 
 ### Corregido

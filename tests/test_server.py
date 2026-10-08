@@ -125,3 +125,37 @@ async def test_disconnect_resets_overlay(aiohttp_client, actions, overlay):
         assert overlay.active is True
     await client.close()
     assert overlay.active is False
+
+
+async def test_http_api_runs_command(aiohttp_client, actions):
+    client = await aiohttp_client(Server(actions, TOKEN).app())
+    resp = await client.get(f"/api/next?token={TOKEN}")
+    assert resp.status == 200
+    assert await resp.json() == {"ok": True, "command": "next"}
+    resp = await client.post(f"/api/volume-up?token={TOKEN}")
+    assert resp.status == 200
+    assert actions.calls == [("key", "next"), ("volume", "up")]
+
+
+async def test_http_api_rejects_invalid_token(aiohttp_client, actions):
+    client = await aiohttp_client(Server(actions, TOKEN).app())
+    for url in ("/api/next", "/api/next?token=wrong"):
+        resp = await client.get(url)
+        assert resp.status == 403
+    assert actions.calls == []
+
+
+async def test_http_api_unknown_command(aiohttp_client, actions):
+    client = await aiohttp_client(Server(actions, TOKEN).app())
+    resp = await client.get(f"/api/explode?token={TOKEN}")
+    assert resp.status == 404
+    assert "next" in (await resp.json())["commands"]
+    assert actions.calls == []
+
+
+async def test_http_api_head_does_nothing(aiohttp_client, actions):
+    # Link previews and prefetchers send HEAD; it must never change a slide.
+    client = await aiohttp_client(Server(actions, TOKEN).app())
+    resp = await client.head(f"/api/next?token={TOKEN}")
+    assert resp.status != 200
+    assert actions.calls == []

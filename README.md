@@ -47,6 +47,7 @@ Pasa diapositivas, usa un puntero láser, controla el volumen, mueve el mouse y 
 | **Texto y dictado** | Escribe o dicta con el micrófono del teclado del teléfono y el texto se escribe en el PC. Incluye atajos para Enter, Tab, Esc, borrar y F5. |
 | **Timer configurable** | Cuenta regresiva o cronómetro, con alertas en los minutos que elijas. Vibra y cambia de color (verde, amarillo, rojo) a medida que se acaba el tiempo. |
 | **Multi-pantalla** | El láser se muestra por defecto en la pantalla secundaria (proyector), con opción de cambiarla desde el teléfono. |
+| **Apple Watch y Atajos** | Pasa diapositivas desde el Apple Watch, con Siri o con un gesto de la mano, usando la app Atajos de Apple. No requiere instalar nada en el reloj. |
 
 ## Inicio rápido
 
@@ -115,6 +116,28 @@ Para que el teléfono abra Mousecli como una aplicación, usa *Agregar a pantall
 ### Ajustes
 
 Desde el engranaje de la web app puedes ajustar la sensibilidad del láser y del mouse, el tamaño del láser, la vibración de los botones y la pantalla donde aparece el láser.
+
+### Apple Watch y Atajos de iPhone
+
+Puedes pasar diapositivas desde el Apple Watch o con Siri usando la app **Atajos**, que ya viene en el iPhone. El iPhone (o el reloj) debe estar en la misma red que el PC.
+
+**1. Crear los atajos en el iPhone**
+
+1. En la web app de Mousecli, abre *Ajustes* y, en "Apple Watch y Atajos", toca *Copiar* junto a "Siguiente diapositiva".
+2. Abre la app Atajos, crea un atajo nuevo y agrega la acción **Obtener contenido de URL**. Pega la dirección copiada.
+3. Nombra el atajo "Siguiente diapositiva" y, en sus detalles, activa **Mostrar en Apple Watch**.
+4. Repite los pasos para "Diapositiva anterior".
+
+La primera vez, iOS puede pedir permiso para acceder a la red local: acéptalo.
+
+**2. Usarlos desde el reloj**
+
+- **Complicación o Smart Stack:** agrega el atajo a la esfera del reloj y tócalo para avanzar.
+- **Siri:** di "Siguiente diapositiva".
+- **Botón de acción** (Apple Watch Ultra): asígnale el atajo en *Configuración > Botón de acción*.
+- **Gestos de la mano:** en el reloj, ve a *Configuración > Accesibilidad > AssistiveTouch*, actívalo junto con *Gestos con la mano* y asigna un atajo a cada gesto. Por ejemplo, juntar los dedos para avanzar y juntarlos dos veces para retroceder. Ten en cuenta que AssistiveTouch desactiva el doble toque del sistema.
+
+Las direcciones incluyen tu token privado: no las compartas. Si generas un token nuevo con `--new-token`, tendrás que copiarlas otra vez.
 
 ### Opciones de línea de comandos
 
@@ -219,6 +242,8 @@ El teléfono envía mensajes JSON cortos por WebSocket (`/ws?token=...`).
 
 El servidor responde con `hello` al conectar (versión y capacidades disponibles), `pong` y `screen` (nombre de la pantalla seleccionada).
 
+Para clientes que no pueden mantener un WebSocket abierto, como Atajos de Apple, existe una API HTTP: `GET` o `POST` a `/api/<comando>?token=...`, que responde `{"ok": true, "command": "<comando>"}`. Los comandos disponibles son `next`, `prev`, `present`, `end`, `volume-up`, `volume-down` y `mute`. Las peticiones `HEAD` no ejecutan comandos, para que las vistas previas de enlaces no cambien de diapositiva.
+
 ### Compilar la aplicación
 
 ```bash
@@ -234,6 +259,8 @@ El resultado queda en `dist/`. Al publicar un tag `v*`, GitHub Actions compila l
 - [x] Puntero láser, pantalla completa, volumen y timer configurable
 - [x] Modo mouse y dictado de texto
 - [x] Aplicaciones descargables para Windows, macOS y Linux
+- [x] Control desde Apple Watch y Siri mediante Atajos
+- [ ] App nativa para Apple Watch con gestos de muñeca
 - [ ] Lápiz y resaltador sobre la presentación
 - [ ] Notas del orador y miniatura de la siguiente diapositiva
 - [ ] Ícono en la bandeja del sistema

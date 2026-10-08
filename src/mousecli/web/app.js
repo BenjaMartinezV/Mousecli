@@ -374,6 +374,57 @@ $("#haptics").addEventListener("change", (e) => {
 });
 $("#btn-screen").addEventListener("click", () => send({ t: "cfg", screen: "next" }));
 
+// --- Apple Watch / Shortcuts ---------------------------------------------------
+
+const API_COMMANDS = [
+  ["next", "Siguiente diapositiva"],
+  ["prev", "Diapositiva anterior"],
+  ["present", "Iniciar pantalla completa"],
+  ["end", "Salir de pantalla completa"],
+];
+
+function apiUrl(cmd) {
+  return `${location.protocol}//${location.host}/api/${cmd}?token=${encodeURIComponent(token)}`;
+}
+
+// navigator.clipboard needs HTTPS; the textarea trick works over plain HTTP.
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  $("#settings").appendChild(ta);
+  ta.select();
+  ta.setSelectionRange(0, text.length);
+  const ok = document.execCommand("copy");
+  ta.remove();
+  return ok ? Promise.resolve() : Promise.reject(new Error("copy failed"));
+}
+
+for (const [cmd, label] of API_COMMANDS) {
+  const row = document.createElement("div");
+  row.className = "api-row";
+  const info = document.createElement("div");
+  const name = document.createElement("b");
+  name.textContent = label;
+  const url = document.createElement("code");
+  url.textContent = apiUrl(cmd);
+  info.append(name, url);
+  const btn = document.createElement("button");
+  btn.textContent = "Copiar";
+  btn.addEventListener("click", () => {
+    copyText(apiUrl(cmd)).then(
+      () => (btn.textContent = "Copiado"),
+      () => (btn.textContent = "Mantén presionada la dirección")
+    );
+    setTimeout(() => (btn.textContent = "Copiar"), 1800);
+  });
+  row.append(info, btn);
+  $("#api-list").appendChild(row);
+}
+
 // --- timer ---------------------------------------------------------------------
 
 const timer = {
