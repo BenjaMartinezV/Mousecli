@@ -14,6 +14,18 @@ log = logging.getLogger(__name__)
 
 WEB_DIR = Path(__file__).parent / "web"
 
+# Plain HTTP commands for clients that can't hold a WebSocket open, such as
+# Apple Shortcuts on the iPhone or Apple Watch ("Get Contents of URL").
+API_COMMANDS = {
+    "next": {"t": "key", "k": "next"},
+    "prev": {"t": "key", "k": "prev"},
+    "present": {"t": "key", "k": "present"},
+    "end": {"t": "key", "k": "end"},
+    "volume-up": {"t": "vol", "a": "up"},
+    "volume-down": {"t": "vol", "a": "down"},
+    "mute": {"t": "vol", "a": "mute"},
+}
+
 
 class Server:
     def __init__(self, actions, token, overlay=None):
@@ -25,6 +37,9 @@ class Server:
     def app(self):
         app = web.Application()
         app.router.add_get("/ws", self.ws_handler)
+        # HEAD must never trigger an action, so it is not routed.
+        app.router.add_get("/api/{cmd}", self.api_handler, allow_head=False)
+        app.router.add_post("/api/{cmd}", self.api_handler)
         app.router.add_get("/", self.index)
         app.router.add_static("/", WEB_DIR)
         return app
@@ -32,9 +47,24 @@ class Server:
     async def index(self, request):
         return web.FileResponse(WEB_DIR / "index.html", headers={"Cache-Control": "no-cache"})
 
+    def _authorized(self, request):
+        return hmac.compare_digest(request.query.get("token", ""), self.token)
+
+    async def api_handler(self, request):
+        if not self._authorized(request):
+            log.warning("Comando HTTP rechazado (token inválido) desde %s", request.remote)
+            raise web.HTTPForbidden()
+        cmd = request.match_info["cmd"]
+        msg = API_COMMANDS.get(cmd)
+        if msg is None:
+            return web.json_response(
+                {"ok": False, "error": "comando desconocido", "commands": list(API_COMMANDS)}, status=404
+            )
+        await self.dispatch(msg)
+        return web.json_response({"ok": True, "command": cmd})
+
     async def ws_handler(self, request):
-        token = request.query.get("token", "")
-        if not hmac.compare_digest(token, self.token):
+        if not self._authorized(request):
             log.warning("Conexión rechazada (token inválido) desde %s", request.remote)
             raise web.HTTPForbidden()
 
