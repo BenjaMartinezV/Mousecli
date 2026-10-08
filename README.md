@@ -27,6 +27,7 @@ Pasa diapositivas, usa un puntero láser, controla el volumen, mueve el mouse y 
 - [Inicio rápido](#inicio-rápido)
 - [Cómo funciona](#cómo-funciona)
 - [Uso](#uso)
+- [Apple Watch](#apple-watch)
 - [Compatibilidad](#compatibilidad)
 - [Solución de problemas](#solución-de-problemas)
 - [Seguridad](#seguridad)
@@ -47,7 +48,7 @@ Pasa diapositivas, usa un puntero láser, controla el volumen, mueve el mouse y 
 | **Texto y dictado** | Escribe o dicta con el micrófono del teclado del teléfono y el texto se escribe en el PC. Incluye atajos para Enter, Tab, Esc, borrar y F5. |
 | **Timer configurable** | Cuenta regresiva o cronómetro, con alertas en los minutos que elijas. Vibra y cambia de color (verde, amarillo, rojo) a medida que se acaba el tiempo. |
 | **Multi-pantalla** | El láser se muestra por defecto en la pantalla secundaria (proyector), con opción de cambiarla desde el teléfono. |
-| **Apple Watch y Atajos** | Pasa diapositivas desde el Apple Watch, con Siri o con un gesto de la mano, usando la app Atajos de Apple. No requiere instalar nada en el reloj. |
+| **Apple Watch** | Pasa diapositivas con un gesto de la mano desde el Apple Watch, sin instalar nada en el reloj. Ver [Apple Watch](#apple-watch). |
 
 ## Inicio rápido
 
@@ -117,28 +118,6 @@ Para que el teléfono abra Mousecli como una aplicación, usa *Agregar a pantall
 
 Desde el engranaje de la web app puedes ajustar la sensibilidad del láser y del mouse, el tamaño del láser, la vibración de los botones y la pantalla donde aparece el láser.
 
-### Apple Watch y Atajos de iPhone
-
-Puedes pasar diapositivas desde el Apple Watch o con Siri usando la app **Atajos**, que ya viene en el iPhone. El iPhone (o el reloj) debe estar en la misma red que el PC.
-
-**1. Crear los atajos en el iPhone**
-
-1. En la web app de Mousecli, abre *Ajustes* y, en "Apple Watch y Atajos", toca *Copiar* junto a "Siguiente diapositiva".
-2. Abre la app Atajos, crea un atajo nuevo y agrega la acción **Obtener contenido de URL**. Pega la dirección copiada.
-3. Nombra el atajo "Siguiente diapositiva" y, en sus detalles, activa **Mostrar en Apple Watch**.
-4. Repite los pasos para "Diapositiva anterior".
-
-La primera vez, iOS puede pedir permiso para acceder a la red local: acéptalo.
-
-**2. Usarlos desde el reloj**
-
-- **Complicación o Smart Stack:** agrega el atajo a la esfera del reloj y tócalo para avanzar.
-- **Siri:** di "Siguiente diapositiva".
-- **Botón de acción** (Apple Watch Ultra): asígnale el atajo en *Configuración > Botón de acción*.
-- **Gestos de la mano:** en el reloj, ve a *Configuración > Accesibilidad > AssistiveTouch*, actívalo junto con *Gestos con la mano* y asigna un atajo a cada gesto. Por ejemplo, juntar los dedos para avanzar y juntarlos dos veces para retroceder. Ten en cuenta que AssistiveTouch desactiva el doble toque del sistema.
-
-Las direcciones incluyen tu token privado: no las compartas. Si generas un token nuevo con `--new-token`, tendrás que copiarlas otra vez.
-
 ### Opciones de línea de comandos
 
 | Opción | Descripción |
@@ -148,6 +127,40 @@ Las direcciones incluyen tu token privado: no las compartas. Si generas un token
 | `--no-gui` | Ejecuta sin ventana ni puntero láser, solo en la terminal. |
 | `--new-token` | Genera un token nuevo. Los teléfonos guardados tendrán que escanear el QR otra vez. |
 | `-v`, `--verbose` | Muestra información de depuración. |
+
+## Apple Watch
+
+Puedes pasar diapositivas desde el Apple Watch con un gesto de la mano, sin instalar nada en el reloj. Se usan dos funciones que ya trae el sistema: la app **Atajos** del iPhone y **AssistiveTouch** del reloj. El iPhone y el reloj deben estar en la misma red que el PC.
+
+### 1. Crear los atajos en el iPhone
+
+1. Abre Mousecli en el iPhone escaneando el QR, ve a *Ajustes* y despliega **Apple Watch y Atajos**.
+2. Toca *Copiar* junto a "Siguiente diapositiva".
+3. Abre la app **Atajos**, crea un atajo nuevo y agrega la acción **Obtener contenido de URL**. Pega la dirección copiada.
+4. Nombra el atajo "Siguiente diapositiva".
+5. Mantén presionado el atajo, toca **Detalles** y activa **Mostrar en Apple Watch**. Sin este paso, el atajo no aparece en el reloj.
+6. Repite los pasos con "Diapositiva anterior".
+
+Toca el atajo una vez en el iPhone para probarlo: la diapositiva debería avanzar. La primera vez, iOS puede pedir permiso para acceder a la red local; acéptalo.
+
+### 2. Asignar los atajos a gestos en el reloj
+
+1. En el Apple Watch, abre **Configuración > Accesibilidad > AssistiveTouch** y actívalo.
+2. Entra en **Gestos con la mano** y actívalo.
+3. Toca el gesto **juntar los dedos** (*Pinch*), baja hasta la sección de **Atajos** y elige "Siguiente diapositiva".
+4. Toca el gesto **juntar los dedos dos veces** (*Double Pinch*) y elige "Diapositiva anterior".
+
+También puedes configurarlo desde el iPhone, en la app **Watch > Accesibilidad > AssistiveTouch > Gestos con la mano**.
+
+### 3. Presentar
+
+- Levanta la muñeca para encender la pantalla del reloj y junta los dedos para avanzar.
+- Si el gesto no responde, revisa la opción **Gesto de activación** en el mismo menú. Si está encendida, primero hay que **cerrar el puño dos veces** para activar AssistiveTouch.
+- Los mismos atajos también funcionan con Siri ("Siguiente diapositiva"), desde una complicación de la esfera o con el botón de acción del Apple Watch Ultra.
+
+> **Nota:** el doble toque del sistema del Apple Watch (Series 9 o posterior) no se puede asignar a un atajo, por eso se usa AssistiveTouch. Al activar AssistiveTouch, ese doble toque queda desactivado.
+
+Las direcciones incluyen tu token privado: no las compartas. Si generas un token nuevo con `--new-token`, tendrás que copiarlas y actualizar los atajos.
 
 ## Compatibilidad
 

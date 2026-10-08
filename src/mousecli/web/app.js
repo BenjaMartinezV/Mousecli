@@ -379,8 +379,6 @@ $("#btn-screen").addEventListener("click", () => send({ t: "cfg", screen: "next"
 const API_COMMANDS = [
   ["next", "Siguiente diapositiva"],
   ["prev", "Diapositiva anterior"],
-  ["present", "Iniciar pantalla completa"],
-  ["end", "Salir de pantalla completa"],
 ];
 
 function apiUrl(cmd) {

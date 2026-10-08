@@ -213,7 +213,14 @@ dialog form { margin-top: 8px; }
 .muted { color: var(--muted); font-size: 12px; }
 
 .shortcuts { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 14px; }
-.shortcuts h3 { margin: 0 0 4px; font-size: 15px; }
+.shortcuts summary {
+  font-weight: 600;
+  font-size: 15px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.shortcuts summary::marker { color: var(--muted); }
+.shortcuts[open] summary { margin-bottom: 4px; }
 .api-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .api-row > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
 .api-row code {
