@@ -266,19 +266,6 @@ python scripts/build.py
 
 El resultado queda en `dist/`. Al publicar un tag `v*`, GitHub Actions compila las versiones para Windows, macOS y Linux y las adjunta automáticamente al release.
 
-## Hoja de ruta
-
-- [x] Pasar diapositivas y conexión por QR
-- [x] Puntero láser, pantalla completa, volumen y timer configurable
-- [x] Modo mouse y dictado de texto
-- [x] Aplicaciones descargables para Windows, macOS y Linux
-- [x] Control desde Apple Watch y Siri mediante Atajos
-- [ ] App nativa para Apple Watch con gestos de muñeca
-- [ ] Lápiz y resaltador sobre la presentación
-- [ ] Notas del orador y miniatura de la siguiente diapositiva
-- [ ] Ícono en la bandeja del sistema
-- [ ] Publicación en PyPI
-
 ## Contribuir
 
 Las contribuciones son bienvenidas. Lee la [guía de contribución](CONTRIBUTING.md) antes de abrir un Pull Request. Para reportar errores o proponer mejoras, usa las [plantillas de issues](https://github.com/BenjaMartinezV/Mousecli/issues/new/choose).
