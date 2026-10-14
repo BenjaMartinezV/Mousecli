@@ -7,6 +7,10 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Cambiado
+
+- El servidor ahora se apaga de forma controlada al cerrar la aplicación, cerrando las conexiones WebSocket, desactivando el láser y liberando el event loop.
+
 ## [0.2.0] - 2026-10-08
 
 ### Agregado

@@ -159,3 +159,20 @@ async def test_http_api_head_does_nothing(aiohttp_client, actions):
     resp = await client.head(f"/api/next?token={TOKEN}")
     assert resp.status != 200
     assert actions.calls == []
+
+
+async def test_invalid_input_values_are_ignored_safely(ws, actions, overlay):
+    await ws.send_json({"t": "mm", "x": "nan", "y": "inf"})
+    await ws.send_json({"t": "lm", "x": "invalid", "y": None})
+    await ws.send_json({"t": "type", "s": "x" * 4097})
+    await ws.send_json({"t": "ping", "id": 0})
+    await ws.receive_json()
+    assert actions.calls == [("mouse_move", 0, 0)]
+    assert overlay.moves == [(0.0, 0.0)]
+
+
+async def test_non_object_messages_are_ignored(ws, actions):
+    await ws.send_json(["key", "next"])
+    await ws.send_json({"t": "ping", "id": 0})
+    assert await ws.receive_json() == {"t": "pong", "id": 0}
+    assert actions.calls == []
