@@ -86,6 +86,7 @@ class Server:
                 "version": __version__,
                 "input": self.actions.ok,
                 "laser": self.overlay is not None,
+                "maxText": MAX_TYPED_TEXT,
             }
         )
         try:
@@ -129,8 +130,11 @@ class Server:
             a.volume(d.get("a"))
         elif t == "type":
             text = str(d.get("s", ""))
-            if len(text) <= MAX_TYPED_TEXT:
-                await asyncio.get_running_loop().run_in_executor(None, a.type_text, text)
+            if len(text) > MAX_TYPED_TEXT:
+                log.warning("Texto descartado: %d caracteres (máximo %d)", len(text), MAX_TYPED_TEXT)
+                return {"t": "warn", "code": "text-too-long", "max": MAX_TYPED_TEXT, "length": len(text)}
+            # Typing long text is slow; don't block the event loop.
+            await asyncio.get_running_loop().run_in_executor(None, a.type_text, text)
         elif t == "cfg" and self.overlay:
             if "size" in d:
                 self.overlay.set_size(self._number(d["size"], default=14.0))

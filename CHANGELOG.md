@@ -10,6 +10,7 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 ### Cambiado
 
 - El servidor ahora se apaga de forma controlada al cerrar la aplicación, cerrando las conexiones WebSocket, desactivando el láser y liberando el event loop.
+- Si el texto a escribir supera los 4.096 caracteres, la web app muestra un aviso y conserva el texto para enviarlo en partes, en vez de descartarlo en silencio.
 
 ## [0.2.0] - 2026-10-08
 
