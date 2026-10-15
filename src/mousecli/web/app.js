@@ -66,6 +66,8 @@ function connect() {
       $("#about").textContent = `Mousecli ${m.version}`;
       if (!m.input) setStatus("error", "El PC no permite controlar teclado/mouse");
       updateHint();
+    } else if (m.t === "warn" && m.code === "text-too-long") {
+      showTextWarning(m.length, m.max);
     } else if (m.t === "screen") {
       $("#screen-name").textContent = m.name;
     }
@@ -340,16 +342,33 @@ function draw() {
 
 // --- text / dictation ----------------------------------------------------------
 
+function showTextWarning(length, max) {
+  const el = $("#text-warning");
+  el.textContent = `El texto tiene ${length} caracteres y el máximo es ${max}. Envíalo en partes.`;
+  el.hidden = false;
+}
+
 function sendText() {
   const input = $("#text-input");
   const text = input.value;
   if (!text) return;
+  // Count code points like the server does, so emoji don't count twice.
+  const length = [...text].length;
+  const max = server.maxText || 4096;
+  if (length > max) {
+    // Keep the text so it can be split and sent in parts.
+    showTextWarning(length, max);
+    buzz([60, 60, 60]);
+    return;
+  }
+  $("#text-warning").hidden = true;
   send({ t: "type", s: text });
   if ($("#text-enter").checked) send({ t: "key", k: "enter" });
   input.value = "";
   tapFeedback();
 }
 $("#text-send").addEventListener("click", sendText);
+$("#text-input").addEventListener("input", () => ($("#text-warning").hidden = true));
 
 // --- settings dialog -----------------------------------------------------------
 

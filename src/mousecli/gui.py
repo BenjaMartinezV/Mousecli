@@ -215,7 +215,7 @@ class MainWindow(QWidget):
         tip = QLabel("Teléfono y PC deben estar en la misma red WiFi.\n¿No conecta? Usa el hotspot del teléfono.")
         tip.setStyleSheet("color: #8b90a0; font-size: 11px;")
         quit_btn = QPushButton("Salir")
-        quit_btn.clicked.connect(QApplication.quit)
+        quit_btn.clicked.connect(self.close)
 
         lay = QVBoxLayout(self)
         lay.setContentsMargins(24, 20, 24, 20)
@@ -241,4 +241,6 @@ class MainWindow(QWidget):
             self.status.setStyleSheet("color: #fbbf24;")
 
     def closeEvent(self, event):
+        self.server.stop()
+        event.accept()
         QApplication.quit()

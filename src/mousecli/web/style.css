@@ -144,6 +144,7 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
   user-select: text;
   -webkit-user-select: text;
 }
+.text-warning { margin: 0; color: var(--yellow); font-size: 13px; }
 .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .keys button { padding: 10px 4px; font-size: 14px; }
 

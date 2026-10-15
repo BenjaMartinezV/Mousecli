@@ -17,6 +17,16 @@ from .actions import Actions
 log = logging.getLogger("mousecli")
 
 
+def valid_port(value):
+    try:
+        port = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("el puerto debe ser un número") from exc
+    if not 1 <= port <= 65535:
+        raise argparse.ArgumentTypeError("el puerto debe estar entre 1 y 65535")
+    return port
+
+
 def config_dir():
     if sys.platform == "win32":
         base = Path(os.environ.get("APPDATA", Path.home()))
@@ -30,12 +40,16 @@ def load_token(regenerate=False):
     """Token persists between runs so a saved phone shortcut keeps working."""
     path = config_dir() / "token"
     if not regenerate and path.exists():
-        token = path.read_text().strip()
+        token = path.read_text(encoding="utf-8").strip()
         if token:
             return token
     token = secrets.token_urlsafe(9)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(token)
+    path.write_text(token, encoding="utf-8")
+    try:
+        path.chmod(0o600)
+    except OSError:
+        log.debug("No se pudieron ajustar los permisos del token", exc_info=True)
     return token
 
 
@@ -101,7 +115,7 @@ def set_windows_app_id():
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog="mousecli", description="Control de presentaciones desde el teléfono.")
-    p.add_argument("--port", type=int, default=8765, help="puerto (default: 8765)")
+    p.add_argument("--port", type=valid_port, default=8765, help="puerto (default: 8765)")
     p.add_argument("--host", help="IP a mostrar en el QR (default: autodetectada)")
     p.add_argument("--no-gui", action="store_true", help="sin ventana ni puntero láser (solo terminal)")
     p.add_argument("--new-token", action="store_true", help="generar un token nuevo (desconecta teléfonos guardados)")
@@ -150,6 +164,7 @@ def main(argv=None):
     app = QApplication(sys.argv)
     app.setApplicationName("Mousecli")
     app.setWindowIcon(QIcon(str(srv.WEB_DIR / "icon-512.png")))
+    app.aboutToQuit.connect(server.stop)
 
     try:
         start_server_thread(server, "0.0.0.0", args.port)
