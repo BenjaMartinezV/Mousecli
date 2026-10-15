@@ -7,10 +7,21 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+## [0.2.1] - 2026-10-15
+
+Gracias a [@OBSK](https://github.com/OBSK), el primer contribuidor del proyecto (#5).
+
 ### Cambiado
 
 - El servidor ahora se apaga de forma controlada al cerrar la aplicación, cerrando las conexiones WebSocket, desactivando el láser y liberando el event loop.
 - Si el texto a escribir supera los 4.096 caracteres, la web app muestra un aviso y conserva el texto para enviarlo en partes, en vez de descartarlo en silencio.
+- La opción `--port` rechaza valores que no son un puerto válido.
+
+### Seguridad
+
+- El servidor ignora los mensajes mal formados y limita los valores numéricos que recibe del teléfono.
+- Se limita el tamaño de los mensajes WebSocket (64 KB) y del texto a escribir (4.096 caracteres).
+- El archivo del token se crea con permisos `600` (solo legible por el usuario) en macOS y Linux.
 
 ## [0.2.0] - 2026-10-08
 
@@ -45,6 +56,7 @@ y el proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 - Selección de la pantalla del láser en configuraciones con proyector.
 - Aplicaciones descargables para Windows, macOS y Linux.
 
-[Sin publicar]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.2.0...HEAD
+[Sin publicar]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/BenjaMartinezV/Mousecli/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/BenjaMartinezV/Mousecli/releases/tag/v0.1.0
